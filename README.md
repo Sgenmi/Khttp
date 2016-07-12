@@ -45,6 +45,20 @@ $khttp-> set_followlocation( $followlocation );
 $maxredirs = 1;
 $khttp-> set_followlocation( $maxredirs );
 
+//设置代理,默认为空数组,则不开启,如果设置代理,如下指定数组,则随机数组代理IP
+$proxy = array(
+    array(
+        "ip" => "113.108.82.29",
+        "port" => 80
+    ),
+    array(
+        "ip" => "113.108.82.29",
+        "port" => 80
+    )
+);
+$khttp->set_proxy($proxy );
+
+
 $a = array(
    0=> array(
         'url' => "http://127.0.0.1/"
