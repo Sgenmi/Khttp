@@ -1,4 +1,6 @@
 
+/* This file was generated automatically by Zephir do not modify it! */
+
 #ifndef PHP_KHTTP_H
 #define PHP_KHTTP_H 1
 
