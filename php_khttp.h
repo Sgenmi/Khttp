@@ -11,7 +11,7 @@
 #include "kernel/globals.h"
 
 #define PHP_KHTTP_NAME        "khttp"
-#define PHP_KHTTP_VERSION     "0.1.1"
+#define PHP_KHTTP_VERSION     "0.1.2"
 #define PHP_KHTTP_EXTNAME     "khttp"
 #define PHP_KHTTP_AUTHOR      "Sgenmi"
 #define PHP_KHTTP_ZEPVERSION  "0.9.3a-dev-5c0fb106a6"

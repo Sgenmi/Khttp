@@ -26,7 +26,7 @@ ZEPHIR_INIT_CLASS(Khttp_Request) {
 
 	ZEPHIR_REGISTER_CLASS(Khttp, Request, khttp, request, khttp_request_method_entry, 0);
 
-	zend_declare_property_long(khttp_request_ce, SL("timeout"), 5, ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_long(khttp_request_ce, SL("timeout"), 500, ZEND_ACC_PRIVATE TSRMLS_CC);
 
 	zend_declare_property_string(khttp_request_ce, SL("useragent"), "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1", ZEND_ACC_PRIVATE TSRMLS_CC);
 
@@ -349,14 +349,14 @@ PHP_METHOD(Khttp_Request, set_proxy) {
 
 PHP_METHOD(Khttp_Request, http) {
 
-	zend_bool _47, _25$$3, _60$$11;
-	HashTable *_1, *_53;
-	HashPosition _0, _52;
-	long nch;
-	zephir_fcall_cache_entry *_4 = NULL, *_6 = NULL, *_9 = NULL, *_28 = NULL, *_45 = NULL, *_46 = NULL, *_49 = NULL, *_51 = NULL, *_57 = NULL, *_59 = NULL, *_63 = NULL, *_66 = NULL, *_68 = NULL;
+	zval *_35$$3 = NULL, *_47$$9 = NULL;
+	zend_bool _20$$3;
+	HashTable *_1;
+	HashPosition _0;
+	zephir_fcall_cache_entry *_4 = NULL, *_5 = NULL, *_7 = NULL, *_23 = NULL, *_34 = NULL, *_36 = NULL, *_37 = NULL, *_39 = NULL, *_41 = NULL, *_43 = NULL, *_49 = NULL, *_51 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *urlarr_param = NULL, *code = NULL, *err = NULL, *moudle = NULL, *node = NULL, *ch = NULL, *v = NULL, *proxy_key = NULL, *mh = NULL, **_2, *running = NULL, *mrc = NULL, **_54, *_3$$3, *_5$$3 = NULL, *_7$$3, _8$$3 = zval_used_for_init, *_10$$3, *_11$$3, *_12$$3, *_13$$3 = NULL, *_14$$3, *_21$$3, *_22$$3, *_23$$3, *_24$$3 = NULL, *_26$$3, *_38$$3, *_39$$3, *_40$$3, *_41$$3, *_42$$3, *_43$$3, *_44$$3, *_15$$5, *_16$$5 = NULL, *_17$$5, *_18$$5 = NULL, *_19$$5, *_20$$5 = NULL, *_27$$6, *_29$$6, *_30$$6, *_31$$6, *_32$$6, _33$$6 = zval_used_for_init, *_34$$6, *_35$$6, *_36$$6, *_37$$6, *_48$$8 = NULL, _50$$9 = zval_used_for_init, *_55$$11, _56$$11 = zval_used_for_init, *_58$$11, *_65$$11, *_67$$11, *_61$$12, *_62$$12 = NULL, *_64$$12;
-	zval *urlarr = NULL, *result, *res, *headerArr = NULL;
+	zval *urlarr_param = NULL, *ch = NULL, *v = NULL, *proxy_key = NULL, *url_k = NULL, *mh = NULL, **_2, *running = NULL, *mrc = NULL, *_3$$3, _6$$3 = zval_used_for_init, *_8$$3, *_9$$3, *_10$$3 = NULL, *_11$$3, *_18$$3, *_19$$3 = NULL, *_21$$3, *_31$$3, *_32$$3, *_33$$3, *_12$$5, *_13$$5 = NULL, *_14$$5, *_15$$5 = NULL, *_16$$5, *_17$$5 = NULL, *_22$$6, *_24$$6, *_25$$6, *_26$$6, _27$$6 = zval_used_for_init, *_28$$6, *_29$$6, *_30$$6, *done$$7 = NULL, *info$$9 = NULL, *_38$$9, *error$$9 = NULL, *_40$$9, *results$$9 = NULL, *_42$$9, *_45$$9 = NULL, *_46$$9 = NULL, *_48$$9, *_50$$9;
+	zval *urlarr = NULL, *headerArr = NULL, *map, *responses, *_44$$9 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &urlarr_param);
@@ -364,195 +364,165 @@ PHP_METHOD(Khttp_Request, http) {
 	zephir_get_arrval(urlarr, urlarr_param);
 
 
-	ZEPHIR_INIT_VAR(result);
-	array_init(result);
-	ZEPHIR_INIT_VAR(res);
-	array_init(res);
 	ZEPHIR_INIT_VAR(headerArr);
 	array_init(headerArr);
-	nch = 0;
-	ZEPHIR_INIT_VAR(ch);
-	array_init(ch);
+	ZEPHIR_INIT_VAR(map);
+	array_init(map);
 	ZEPHIR_CALL_FUNCTION(&mh, "curl_multi_init", NULL, 3);
 	zephir_check_call_status();
-	zephir_is_iterable(urlarr, &_1, &_0, 0, 0, "khttp/request.zep", 134);
+	zephir_is_iterable(urlarr, &_1, &_0, 0, 0, "khttp/request.zep", 129);
 	for (
 	  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_1, &_0)
 	) {
+		ZEPHIR_GET_HMKEY(url_k, _1, _0);
 		ZEPHIR_GET_HVALUE(v, _2);
 		_3$$3 = zephir_fetch_nproperty_this(this_ptr, SL("is_rand_ip"), PH_NOISY_CC);
 		if (zephir_is_true(_3$$3)) {
 			ZEPHIR_CALL_METHOD(NULL, this_ptr, "rand_ip", &_4, 2);
 			zephir_check_call_status();
 		}
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "curl_init", &_6, 4);
+		ZEPHIR_CALL_FUNCTION(&ch, "curl_init", &_5, 4);
 		zephir_check_call_status();
-		zephir_array_update_long(&ch, nch, &_5$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		ZEPHIR_INIT_NVAR(headerArr);
 		array_init(headerArr);
-		zephir_array_fetch_long(&_7$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 107 TSRMLS_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 19913);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _7$$3, &_8$$3, ZEPHIR_GLOBAL(global_true));
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 19913);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, ZEPHIR_GLOBAL(global_true));
 		zephir_check_call_status();
-		zephir_array_fetch_long(&_10$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 108 TSRMLS_CC);
-		zephir_array_fetch_string(&_11$$3, v, SL("url"), PH_NOISY | PH_READONLY, "khttp/request.zep", 108 TSRMLS_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 10002);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _10$$3, &_8$$3, _11$$3);
+		zephir_array_fetch_string(&_8$$3, v, SL("url"), PH_NOISY | PH_READONLY, "khttp/request.zep", 104 TSRMLS_CC);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 10002);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, _8$$3);
 		zephir_check_call_status();
-		_12$$3 = zephir_fetch_nproperty_this(this_ptr, SL("referer"), PH_NOISY_CC);
-		ZEPHIR_INIT_LNVAR(_13$$3);
-		ZEPHIR_CONCAT_SV(_13$$3, "Referer:", _12$$3);
-		zephir_array_append(&headerArr, _13$$3, PH_SEPARATE, "khttp/request.zep", 110);
-		_14$$3 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
-		if (zephir_is_true(_14$$3)) {
-			_15$$5 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
-			ZEPHIR_INIT_LNVAR(_16$$5);
-			ZEPHIR_CONCAT_SV(_16$$5, "CLIENT-IP:", _15$$5);
-			zephir_array_append(&headerArr, _16$$5, PH_SEPARATE, "khttp/request.zep", 112);
-			_17$$5 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
-			ZEPHIR_INIT_LNVAR(_18$$5);
-			ZEPHIR_CONCAT_SV(_18$$5, "X-FORWARDED-FOR:", _17$$5);
-			zephir_array_append(&headerArr, _18$$5, PH_SEPARATE, "khttp/request.zep", 113);
-			_19$$5 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
-			ZEPHIR_INIT_LNVAR(_20$$5);
-			ZEPHIR_CONCAT_SV(_20$$5, "REMOTE_ADDR:", _19$$5);
-			zephir_array_append(&headerArr, _20$$5, PH_SEPARATE, "khttp/request.zep", 114);
+		_9$$3 = zephir_fetch_nproperty_this(this_ptr, SL("referer"), PH_NOISY_CC);
+		ZEPHIR_INIT_LNVAR(_10$$3);
+		ZEPHIR_CONCAT_SV(_10$$3, "Referer:", _9$$3);
+		zephir_array_append(&headerArr, _10$$3, PH_SEPARATE, "khttp/request.zep", 106);
+		_11$$3 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
+		if (zephir_is_true(_11$$3)) {
+			_12$$5 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
+			ZEPHIR_INIT_LNVAR(_13$$5);
+			ZEPHIR_CONCAT_SV(_13$$5, "CLIENT-IP:", _12$$5);
+			zephir_array_append(&headerArr, _13$$5, PH_SEPARATE, "khttp/request.zep", 108);
+			_14$$5 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
+			ZEPHIR_INIT_LNVAR(_15$$5);
+			ZEPHIR_CONCAT_SV(_15$$5, "X-FORWARDED-FOR:", _14$$5);
+			zephir_array_append(&headerArr, _15$$5, PH_SEPARATE, "khttp/request.zep", 109);
+			_16$$5 = zephir_fetch_nproperty_this(this_ptr, SL("rand_ip"), PH_NOISY_CC);
+			ZEPHIR_INIT_LNVAR(_17$$5);
+			ZEPHIR_CONCAT_SV(_17$$5, "REMOTE_ADDR:", _16$$5);
+			zephir_array_append(&headerArr, _17$$5, PH_SEPARATE, "khttp/request.zep", 110);
 		}
-		zephir_array_fetch_long(&_21$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 116 TSRMLS_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 10023);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _21$$3, &_8$$3, headerArr);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 10023);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, headerArr);
 		zephir_check_call_status();
-		zephir_array_fetch_long(&_22$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 117 TSRMLS_CC);
-		_23$$3 = zephir_fetch_nproperty_this(this_ptr, SL("useragent"), PH_NOISY_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 10018);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _22$$3, &_8$$3, _23$$3);
+		_18$$3 = zephir_fetch_nproperty_this(this_ptr, SL("useragent"), PH_NOISY_CC);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 10018);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, _18$$3);
 		zephir_check_call_status();
-		ZEPHIR_OBS_NVAR(_24$$3);
-		zephir_read_property_this(&_24$$3, this_ptr, SL("proxy"), PH_NOISY_CC);
-		_25$$3 = Z_TYPE_P(_24$$3) == IS_ARRAY;
-		if (_25$$3) {
-			_26$$3 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
-			_25$$3 = zephir_fast_count_int(_26$$3 TSRMLS_CC) > 0;
+		ZEPHIR_OBS_NVAR(_19$$3);
+		zephir_read_property_this(&_19$$3, this_ptr, SL("proxy"), PH_NOISY_CC);
+		_20$$3 = Z_TYPE_P(_19$$3) == IS_ARRAY;
+		if (_20$$3) {
+			_21$$3 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
+			_20$$3 = zephir_fast_count_int(_21$$3 TSRMLS_CC) > 0;
 		}
-		if (_25$$3) {
-			_27$$6 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
-			ZEPHIR_CALL_FUNCTION(&proxy_key, "array_rand", &_28, 1, _27$$6);
+		if (_20$$3) {
+			_22$$6 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
+			ZEPHIR_CALL_FUNCTION(&proxy_key, "array_rand", &_23, 1, _22$$6);
 			zephir_check_call_status();
-			zephir_array_fetch_long(&_29$$6, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 123 TSRMLS_CC);
-			_30$$6 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
-			zephir_array_fetch(&_31$$6, _30$$6, proxy_key, PH_NOISY | PH_READONLY, "khttp/request.zep", 123 TSRMLS_CC);
-			zephir_array_fetch_string(&_32$$6, _31$$6, SL("ip"), PH_NOISY | PH_READONLY, "khttp/request.zep", 123 TSRMLS_CC);
-			ZEPHIR_SINIT_NVAR(_33$$6);
-			ZVAL_LONG(&_33$$6, 10004);
-			ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _29$$6, &_33$$6, _32$$6);
+			_24$$6 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
+			zephir_array_fetch(&_25$$6, _24$$6, proxy_key, PH_NOISY | PH_READONLY, "khttp/request.zep", 119 TSRMLS_CC);
+			zephir_array_fetch_string(&_26$$6, _25$$6, SL("ip"), PH_NOISY | PH_READONLY, "khttp/request.zep", 119 TSRMLS_CC);
+			ZEPHIR_SINIT_NVAR(_27$$6);
+			ZVAL_LONG(&_27$$6, 10004);
+			ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_27$$6, _26$$6);
 			zephir_check_call_status();
-			zephir_array_fetch_long(&_34$$6, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 124 TSRMLS_CC);
-			_35$$6 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
-			zephir_array_fetch(&_36$$6, _35$$6, proxy_key, PH_NOISY | PH_READONLY, "khttp/request.zep", 124 TSRMLS_CC);
-			zephir_array_fetch_string(&_37$$6, _36$$6, SL("port"), PH_NOISY | PH_READONLY, "khttp/request.zep", 124 TSRMLS_CC);
-			ZEPHIR_SINIT_NVAR(_33$$6);
-			ZVAL_LONG(&_33$$6, 59);
-			ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _34$$6, &_33$$6, _37$$6);
+			_28$$6 = zephir_fetch_nproperty_this(this_ptr, SL("proxy"), PH_NOISY_CC);
+			zephir_array_fetch(&_29$$6, _28$$6, proxy_key, PH_NOISY | PH_READONLY, "khttp/request.zep", 120 TSRMLS_CC);
+			zephir_array_fetch_string(&_30$$6, _29$$6, SL("port"), PH_NOISY | PH_READONLY, "khttp/request.zep", 120 TSRMLS_CC);
+			ZEPHIR_SINIT_NVAR(_27$$6);
+			ZVAL_LONG(&_27$$6, 59);
+			ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_27$$6, _30$$6);
 			zephir_check_call_status();
 		}
-		zephir_array_fetch_long(&_38$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 127 TSRMLS_CC);
-		_39$$3 = zephir_fetch_nproperty_this(this_ptr, SL("timeout"), PH_NOISY_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 13);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _38$$3, &_8$$3, _39$$3);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 99);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, ZEPHIR_GLOBAL(global_true));
 		zephir_check_call_status();
-		zephir_array_fetch_long(&_40$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 128 TSRMLS_CC);
-		_41$$3 = zephir_fetch_nproperty_this(this_ptr, SL("followlocation"), PH_NOISY_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 52);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _40$$3, &_8$$3, _41$$3);
+		_31$$3 = zephir_fetch_nproperty_this(this_ptr, SL("timeout"), PH_NOISY_CC);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 155);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, _31$$3);
 		zephir_check_call_status();
-		zephir_array_fetch_long(&_42$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 129 TSRMLS_CC);
-		_43$$3 = zephir_fetch_nproperty_this(this_ptr, SL("maxredirs"), PH_NOISY_CC);
-		ZEPHIR_SINIT_NVAR(_8$$3);
-		ZVAL_LONG(&_8$$3, 68);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_9, 5, _42$$3, &_8$$3, _43$$3);
+		_32$$3 = zephir_fetch_nproperty_this(this_ptr, SL("followlocation"), PH_NOISY_CC);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 52);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, _32$$3);
 		zephir_check_call_status();
-		zephir_array_fetch_long(&_44$$3, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 130 TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_multi_add_handle", &_45, 6, mh, _44$$3);
+		_33$$3 = zephir_fetch_nproperty_this(this_ptr, SL("maxredirs"), PH_NOISY_CC);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, 68);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_setopt", &_7, 5, ch, &_6$$3, _33$$3);
 		zephir_check_call_status();
-		nch = (nch + 1);
+		ZEPHIR_CALL_FUNCTION(NULL, "curl_multi_add_handle", &_34, 6, mh, ch);
+		zephir_check_call_status();
+		zephir_get_strval(_35$$3, ch);
+		zephir_array_update_zval(&map, _35$$3, &url_k, PH_COPY | PH_SEPARATE);
 	}
+	ZEPHIR_INIT_VAR(responses);
+	array_init(responses);
 	ZEPHIR_INIT_VAR(running);
 	ZVAL_NULL(running);
 	do {
-		ZEPHIR_MAKE_REF(running);
-		ZEPHIR_CALL_FUNCTION(&mrc, "curl_multi_exec", &_46, 7, mh, running);
-		ZEPHIR_UNREF(running);
-		zephir_check_call_status();
-	} while (ZEPHIR_IS_LONG(mrc, -1));
-	while (1) {
-		_47 = zephir_is_true(running);
-		if (_47) {
-			_47 = ZEPHIR_IS_LONG(mrc, 0);
-		}
-		if (!(_47)) {
-			break;
-		}
-		ZEPHIR_CALL_FUNCTION(&_48$$8, "curl_multi_select", &_49, 8, mh);
-		zephir_check_call_status();
-		if (ZEPHIR_IS_LONG(_48$$8, -1)) {
-			ZEPHIR_SINIT_NVAR(_50$$9);
-			ZVAL_LONG(&_50$$9, 100);
-			ZEPHIR_CALL_FUNCTION(NULL, "usleep", &_51, 9, &_50$$9);
-			zephir_check_call_status();
-		}
 		do {
 			ZEPHIR_MAKE_REF(running);
-			ZEPHIR_CALL_FUNCTION(&mrc, "curl_multi_exec", &_46, 7, mh, running);
+			ZEPHIR_CALL_FUNCTION(&mrc, "curl_multi_exec", &_36, 7, mh, running);
 			ZEPHIR_UNREF(running);
 			zephir_check_call_status();
 		} while (ZEPHIR_IS_LONG(mrc, -1));
-	}
-	nch = 0;
-	zephir_is_iterable(urlarr, &_53, &_52, 0, 0, "khttp/request.zep", 163);
-	for (
-	  ; zephir_hash_get_current_data_ex(_53, (void**) &_54, &_52) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_53, &_52)
-	) {
-		ZEPHIR_GET_HMKEY(moudle, _53, _52);
-		ZEPHIR_GET_HVALUE(node, _54);
-		zephir_array_fetch_long(&_55$$11, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 151 TSRMLS_CC);
-		ZEPHIR_SINIT_NVAR(_56$$11);
-		ZVAL_LONG(&_56$$11, 2097154);
-		ZEPHIR_CALL_FUNCTION(&code, "curl_getinfo", &_57, 10, _55$$11, &_56$$11);
+		ZEPHIR_CALL_FUNCTION(&done$$7, "curl_multi_info_read", &_37, 8, mh);
 		zephir_check_call_status();
-		zephir_array_fetch_long(&_58$$11, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 152 TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(&err, "curl_error", &_59, 11, _58$$11);
-		zephir_check_call_status();
-		_60$$11 = ZEPHIR_IS_STRING(err, "");
-		if (_60$$11) {
-			_60$$11 = ZEPHIR_IS_LONG(code, 200);
-		}
-		if (_60$$11) {
-			zephir_array_fetch_long(&_61$$12, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 154 TSRMLS_CC);
-			ZEPHIR_CALL_FUNCTION(&_62$$12, "curl_multi_getcontent", &_63, 12, _61$$12);
+		while (1) {
+			if (!(zephir_is_true(done$$7))) {
+				break;
+			}
+			zephir_array_fetch_string(&_38$$9, done$$7, SL("handle"), PH_NOISY | PH_READONLY, "khttp/request.zep", 140 TSRMLS_CC);
+			ZEPHIR_CALL_FUNCTION(&info$$9, "curl_getinfo", &_39, 9, _38$$9);
 			zephir_check_call_status();
-			zephir_array_update_long(&res, nch, &_62$$12, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
-			zephir_array_fetch_long(&_64$$12, res, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 155 TSRMLS_CC);
-			zephir_array_update_zval(&result, moudle, &_64$$12, PH_COPY | PH_SEPARATE);
-		} else {
-			zephir_array_update_zval(&result, moudle, &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);
+			zephir_array_fetch_string(&_40$$9, done$$7, SL("handle"), PH_NOISY | PH_READONLY, "khttp/request.zep", 141 TSRMLS_CC);
+			ZEPHIR_CALL_FUNCTION(&error$$9, "curl_error", &_41, 10, _40$$9);
+			zephir_check_call_status();
+			zephir_array_fetch_string(&_42$$9, done$$7, SL("handle"), PH_NOISY | PH_READONLY, "khttp/request.zep", 142 TSRMLS_CC);
+			ZEPHIR_CALL_FUNCTION(&results$$9, "curl_multi_getcontent", &_43, 11, _42$$9);
+			zephir_check_call_status();
+			ZEPHIR_INIT_NVAR(_44$$9);
+			zephir_create_array(_44$$9, 3, 0 TSRMLS_CC);
+			zephir_array_update_string(&_44$$9, SL("info"), &info$$9, PH_COPY | PH_SEPARATE);
+			zephir_array_update_string(&_44$$9, SL("error"), &error$$9, PH_COPY | PH_SEPARATE);
+			zephir_array_update_string(&_44$$9, SL("results"), &results$$9, PH_COPY | PH_SEPARATE);
+			ZEPHIR_OBS_NVAR(_45$$9);
+			ZEPHIR_OBS_NVAR(_46$$9);
+			zephir_array_fetch_string(&_46$$9, done$$7, SL("handle"), PH_NOISY, "khttp/request.zep", 144 TSRMLS_CC);
+			zephir_get_strval(_47$$9, _46$$9);
+			zephir_array_fetch(&_45$$9, map, _47$$9, PH_NOISY, "khttp/request.zep", 144 TSRMLS_CC);
+			zephir_array_update_zval(&responses, _45$$9, &_44$$9, PH_COPY | PH_SEPARATE);
+			zephir_array_fetch_string(&_48$$9, done$$7, SL("handle"), PH_NOISY | PH_READONLY, "khttp/request.zep", 145 TSRMLS_CC);
+			ZEPHIR_CALL_FUNCTION(NULL, "curl_multi_remove_handle", &_49, 12, mh, _48$$9);
+			zephir_check_call_status();
+			zephir_array_fetch_string(&_50$$9, done$$7, SL("handle"), PH_NOISY | PH_READONLY, "khttp/request.zep", 146 TSRMLS_CC);
+			ZEPHIR_CALL_FUNCTION(NULL, "curl_close", &_51, 13, _50$$9);
+			zephir_check_call_status();
+			ZEPHIR_CALL_FUNCTION(&done$$7, "curl_multi_info_read", &_37, 8, mh);
+			zephir_check_call_status();
 		}
-		zephir_array_fetch_long(&_65$$11, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 159 TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_multi_remove_handle", &_66, 13, mh, _65$$11);
-		zephir_check_call_status();
-		zephir_array_fetch_long(&_67$$11, ch, nch, PH_NOISY | PH_READONLY, "khttp/request.zep", 160 TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(NULL, "curl_close", &_68, 14, _67$$11);
-		zephir_check_call_status();
-		nch = (nch + 1);
-	}
-	RETURN_CTOR(result);
+	} while (zephir_is_true(running));
+	ZEPHIR_CALL_FUNCTION(NULL, "curl_multi_close", NULL, 14, mh);
+	zephir_check_call_status();
+	RETURN_CTOR(responses);
 
 }
 

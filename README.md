@@ -1,9 +1,10 @@
 
 #异步并行请求 PHP扩展 Khttp
 
+#远端性能越好，优先返回
 
 ##条件[Requirement]
-* PHP 5.3+
+* PHP 5.3~5.6 暂不支技PHP7
 
 ##安装 [Install]
 $phpize
@@ -27,7 +28,7 @@ $start_time = microtime(TRUE);
 //设置ua
 $ua = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.3";
 $khttp->set_useragent( $ua);
-//设置超时时间
+//设置超时时间 毫秒超时
 $khttp->set_timeout (50);
 //设置关闭随机IP,默认开启
 //boolean 类型
@@ -45,28 +46,14 @@ $khttp-> set_followlocation( $followlocation );
 $maxredirs = 1;
 $khttp-> set_followlocation( $maxredirs );
 
-//设置代理,默认为空数组,则不开启,如果设置代理,如下指定数组,则随机数组代理IP
-$proxy = array(
-    array(
-        "ip" => "113.108.82.29",
-        "port" => 80
-    ),
-    array(
-        "ip" => "113.108.82.29",
-        "port" => 80
-    )
-);
-$khttp->set_proxy($proxy );
-
-
 $a = array(
-   0=> array(
+   'localhost'=> array(
         'url' => "http://127.0.0.1/"
     ),
-    1=>array(
+    'baidu_one'=>array(
         'url' => "http://www.baidu.com"
     ),
-    2=>array(
+    'baidu_two'=>array(
         'url' => "http://www.baidu.com"
     )
 );
