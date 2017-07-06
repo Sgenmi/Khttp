@@ -13,9 +13,9 @@
 #define PHP_KHTTP_NAME        "khttp"
 #define PHP_KHTTP_VERSION     "0.1.2"
 #define PHP_KHTTP_EXTNAME     "khttp"
-#define PHP_KHTTP_AUTHOR      "Sgenmi"
-#define PHP_KHTTP_ZEPVERSION  "0.9.3a-dev-5c0fb106a6"
-#define PHP_KHTTP_DESCRIPTION "QQ:150560159"
+#define PHP_KHTTP_AUTHOR      "Sgenmi(150560159@qq.com)"
+#define PHP_KHTTP_ZEPVERSION  "0.9.9"
+#define PHP_KHTTP_DESCRIPTION ""
 
 
 
@@ -42,10 +42,6 @@ ZEND_BEGIN_MODULE_GLOBALS(khttp)
 	/* Max recursion control */
 	unsigned int recursive_lock;
 
-	/* Global constants */
-	zval *global_true;
-	zval *global_false;
-	zval *global_null;
 	
 ZEND_END_MODULE_GLOBALS(khttp)
 
@@ -56,13 +52,14 @@ ZEND_END_MODULE_GLOBALS(khttp)
 ZEND_EXTERN_MODULE_GLOBALS(khttp)
 
 #ifdef ZTS
-	#define ZEPHIR_GLOBAL(v) TSRMG(khttp_globals_id, zend_khttp_globals *, v)
+	#define ZEPHIR_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(khttp, v)
 #else
 	#define ZEPHIR_GLOBAL(v) (khttp_globals.v)
 #endif
 
 #ifdef ZTS
-	#define ZEPHIR_VGLOBAL ((zend_khttp_globals *) (*((void ***) tsrm_ls))[TSRM_UNSHUFFLE_RSRC_ID(khttp_globals_id)])
+	void ***tsrm_ls;
+	#define ZEPHIR_VGLOBAL ((zend_khttp_globals *) (*((void ***) tsrm_get_ls_cache()))[TSRM_UNSHUFFLE_RSRC_ID(khttp_globals_id)])
 #else
 	#define ZEPHIR_VGLOBAL &(khttp_globals)
 #endif
