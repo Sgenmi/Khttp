@@ -3,7 +3,7 @@
 	+------------------------------------------------------------------------+
 	| Zephir Language                                                        |
 	+------------------------------------------------------------------------+
-	| Copyright (c) 2011-2016 Zephir Team  (http://www.zephir-lang.com)      |
+	| Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
 	+------------------------------------------------------------------------+
 	| This source file is subject to the New BSD License that is bundled     |
 	| with this package in the file docs/LICENSE.txt.                        |
@@ -14,7 +14,6 @@
 	+------------------------------------------------------------------------+
 	| Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
 	|          Eduar Carvajal <eduar@zephir-lang.com>                        |
-	|          Vladimir Kolesnikov <vladimir@extrememember.com>              |
 	+------------------------------------------------------------------------+
 */
 
@@ -22,37 +21,27 @@
 #include "config.h"
 #endif
 
-#include "php.h"
+#include <php.h>
 #include "php_ext.h"
+#include "kernel/debug.h"
 
-#include "kernel/main.h"
-#include "kernel/memory.h"
+#ifndef ZEPHIR_RELEASE
 
-/**
- * Returns an iterator from the object
- */
-zend_object_iterator *zephir_get_iterator(zval *iterator TSRMLS_DC) {
-
-	zend_class_entry *ce;
-	zend_object_iterator *it;
-
-	if (Z_TYPE_P(iterator) != IS_OBJECT) {
-		return NULL;
+int zephir_assert_class(zval *object, char *class_name TSRMLS_DC) {
+	if (object) {
+		if (Z_TYPE_P(object) != IS_OBJECT) {
+			zephir_error_space();
+			fprintf(zephir_log, "AssertClass: [Failed] Value is not an object\n");
+			return FAILURE;
+		} else {
+			if (strcmp(Z_OBJCE_P(object)->name, class_name)) {
+				zephir_error_space();
+				fprintf(zephir_log, "AssertClass: [Failed] Object is not class %s, is %s\n", class_name, Z_OBJCE_P(object)->name);
+				return FAILURE;
+			}
+		}
 	}
-
-	ce = Z_OBJCE_P(iterator);
-	it = ce->get_iterator(ce, iterator, 0 TSRMLS_CC);
-	if (!it || EG(exception)) {
-		return NULL;
-	}
-
-	if (it->funcs->get_current_key == NULL) {
-		return NULL;
-	}
-
-	if (it->funcs->rewind == NULL) {
-		return NULL;
-	}
-
-	return it;
+	return SUCCESS;
 }
+
+#endif

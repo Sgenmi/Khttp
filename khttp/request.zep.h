@@ -14,7 +14,7 @@ PHP_METHOD(Khttp_Request, set_is_rand_ip);
 PHP_METHOD(Khttp_Request, set_referer);
 PHP_METHOD(Khttp_Request, set_proxy);
 PHP_METHOD(Khttp_Request, http);
-zend_object *zephir_init_properties_Khttp_Request(zend_class_entry *class_type TSRMLS_DC);
+zend_object_value zephir_init_properties_Khttp_Request(zend_class_entry *class_type TSRMLS_DC);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_khttp_request_set_ip, 0, 0, 1)
 	ZEND_ARG_INFO(0, ip)
