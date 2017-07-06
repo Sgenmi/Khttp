@@ -1,10 +1,12 @@
 
 # 异步并行请求 PHP扩展 Khttp
 
-# 远端性能越好，优先返回
+## 远端性能越好，优先返回
 
 ## 条件[Requirement]
-* PHP 5.3~5.6 暂不支技PHP7
+* PHP5.3~5.6
+* PHP7+ 请下载对应版本
+
 
 ## 安装 [Install]
 $phpize
