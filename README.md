@@ -1,13 +1,15 @@
 
-#异步并行请求 PHP扩展 Khttp
+# 异步并行请求 PHP扩展 Khttp
 
-#远端性能越好，优先返回
+## 远端性能越好，优先返回
 
-##条件[Requirement]
-* PHP 5.3~5.6 
+
+## 条件[Requirement]
+* PHP5.3~5.6
 * PHP7+ 请下载对应版本
 
-##安装 [Install]
+
+## 安装 [Install]
 $phpize
 
 $./configure --with-php-config=php-config
@@ -16,7 +18,7 @@ $make && make install
 
 
 
-##文档[Document]
+## 文档[Document]
 
 ```javascript
 
@@ -68,8 +70,8 @@ echo '耗时' . round($end_time - $start_time, 3) . '秒';
 
 
 ```
-##开发工具
+## 开发工具
 * [Zephir](https://www.zephir-lang.com/) 
 
-##关于作者
+## 关于作者
 
