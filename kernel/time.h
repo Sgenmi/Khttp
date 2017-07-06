@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team  (http://www.zephir-lang.com)      |
+  | Copyright (c) 2011-2017 Zephir Team  (http://www.zephir-lang.com)      |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -24,7 +24,7 @@
 
 void zephir_time(zval *return_value);
 #ifdef HAVE_GETTIMEOFDAY
-void zephir_microtime(zval *return_value, zval *get_as_float TSRMLS_DC);
+void zephir_microtime(zval *return_value, zval *get_as_float);
 #endif
 
 #endif /* ZEPHIR_KERNEL_TIME_H */
